@@ -69,7 +69,7 @@ if "tracker.json" not in os.listdir():
 while True:
     check_file()
     prev_app=get_focused_app().lower()    
-    sleep(3)
+    sleep(60)
     todayFound=False
     today=datetime.date.today()
     currTime=datetime.datetime.now()
