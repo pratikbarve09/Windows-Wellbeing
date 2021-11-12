@@ -79,7 +79,7 @@ while True:
 
     curr_app=get_focused_app().lower()
     minimized_apps=get_minimized_apps()
-    if(curr_app==prev_app and curr_app!='LockApp.exe' and curr_app):
+    if(curr_app==prev_app and curr_app.lower()!='lockapp.exe' and curr_app and curr_app.lower()!='lockapp'):
         curr_app=curr_app[:-4]
         for statDaily in data:
             if(statDaily['date']==str(today)):
@@ -100,24 +100,25 @@ while True:
             data.append(todayStat)
             print("added today's date")
 
-    minimized_apps=get_minimized_apps()
-    for i in minimized_apps:
-        if(curr_app in i):
-            #removing first occurence of app in all apps list with name containing word of focused app
-            minimized_apps.remove(i)
-            break
-    #got minimized apps without current app which is in focus
-    #print(f"{today} minimized apps",minimized_apps)
-    for statDaily in data:
-            if(statDaily['date']==str(today)):
-                for each_app in minimized_apps:
-                    prevUsedTime=statDaily['background_apps'].get(each_app,0)
-                    if prevUsedTime!=0:
-                        minute=int( prevUsedTime[0:prevUsedTime.find('m')] )
-                    else:
-                        minute=0
-                    statDaily['background_apps'][each_app]=(str(minute+1)+"min")
+    if curr_app.lower()!='lockapp.exe' and curr_app!='lockapp':
+        minimized_apps=get_minimized_apps()
+        for i in minimized_apps:
+            if(curr_app in i):
+                #removing first occurence of app in all apps list with name containing word of focused app
+                minimized_apps.remove(i)
                 break
+        #got minimized apps without current app which is in focus
+        #print(f"{today} minimized apps",minimized_apps)
+        for statDaily in data:
+                if(statDaily['date']==str(today)):
+                    for each_app in minimized_apps:
+                        prevUsedTime=statDaily['background_apps'].get(each_app,0)
+                        if prevUsedTime!=0:
+                            minute=int( prevUsedTime[0:prevUsedTime.find('m')] )
+                        else:
+                            minute=0
+                        statDaily['background_apps'][each_app]=(str(minute+1)+"min")
+                    break
 
 
     #rewriting json file
