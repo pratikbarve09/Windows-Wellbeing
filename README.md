@@ -20,8 +20,8 @@ For storing data, json file is used. Script generates json file named `tracker.j
     pip install -r requirements.txt
     ```
 * #### To compile into Executable file:
-    I used `auto-py-to-exe` python package for compiling this file.
-    <img src="images/auto-py-to-exe.png" alt="auto-py-to-exe settings screenshot" width="500"/>
+    I used `auto-py-to-exe` python package for compiling this file.<br/>
+    <img src="images/auto-py-to-exe.png" alt="auto-py-to-exe settings screenshot" width="500"/><br/>
     you will see Complete status in the end.
 
 * #### To run newly created exe file without opening terminal window
@@ -35,8 +35,8 @@ For storing data, json file is used. Script generates json file named `tracker.j
     Now double-click `Runner.vbs` file from file explorer and it will start `WindowsWellbeing.exe` file without opening command prompt.<br/>
     :pushpin::pushpin::pushpin:
     After starting `WindowsWellbeing.exe` through `Runner.vbs`, `tracker.json` file will get created in the same directory as that of `Runner.vbs`.<br/>
-    As you can see task manager shows that `WindowsWellbeing.exe` is running in background.
-    <img src="images/taskmanagerScreenShot.png" alt="Task Manager screenshot" width="500"/>
+    As you can see task manager shows that `WindowsWellbeing.exe` is running in background.<br/>
+    <img src="images/taskmanagerScreenShot.png" alt="Task Manager screenshot" width="500"/><br/>
     Now you can continue with your work and script will note your timing with each app.
     
     
