@@ -38,14 +38,14 @@ def get_minimized_apps():
     return minimized_apps[2:]
 
 def add_template():
-    with open("tracker.json",'w') as f:
+    with open(r"tracker.json",'w') as f:
             json.dump(template, f)
             f.close()
     print("added template")
 
 def check_file():
     try:
-        with open("tracker.json",'r') as f:
+        with open(r"tracker.json",'r') as f:
             data=json.load(f)
             data=data['data']
     except:
@@ -55,7 +55,7 @@ def check_file():
 
 
 def create_file():
-        with open("tracker.json",'w') as f:
+        with open(r"tracker.json",'w') as f:
             f.close()
         add_template()
 
@@ -73,7 +73,7 @@ while True:
     todayFound=False
     today=datetime.date.today()
     currTime=datetime.datetime.now()
-    with open("tracker.json") as f:
+    with open(r"tracker.json") as f:
         data=json.load(f)
         data=data['data']
 
@@ -124,6 +124,6 @@ while True:
     #rewriting json file
     newData=dict()
     newData['data']=data
-    with open("tracker.json",'w') as f:
+    with open(r"tracker.json",'w') as f:
         json.dump(newData,f)
         f.close()

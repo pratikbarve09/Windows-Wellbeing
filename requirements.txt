@@ -1,8 +1,11 @@
-altgraph==0.17.2auto-py-to-exe==2.11.0
+altgraph==0.17.2
+auto-py-to-exe==2.11.0
 bottle==0.12.19
-bottle-websocket==0.2.9cffi==1.15.0Eel==0.12.4
+bottle-websocket==0.2.9
+cffi==1.15.0Eel==0.12.4
 future==0.18.2
-gevent==21.8.0gevent-websocket==0.10.1
+gevent==21.8.0
+gevent-websocket==0.10.1
 greenlet==1.1.2
 pefile==2021.9.3
 psutil==5.8.0
