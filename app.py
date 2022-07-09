@@ -10,11 +10,13 @@ import datetime
 from PyQt5.QtCore import *
 import random
 from PyQt5.QtGui import QFont, QPainter, QPen
+import os
 #gui.py file from gui.ui
 from gui import Ui_WindowsWellbeing
 
 #add your json path here
-PATH_TO_JSON="../../"+"tracker.json"
+os.chdir="dist"
+PATH_TO_JSON=""+"tracker.json"
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -86,7 +88,7 @@ class MainWindow(QMainWindow):
 
         #####################################################
         #timer to call fn continuosly after certain interval
-        timer = QTimer(self, interval=60000, timeout=self.update_today)
+        timer = QTimer(self, interval=600, timeout=self.update_today)
         timer.start()
 
     ######updating today's graphs#########
@@ -159,7 +161,8 @@ class MainWindow(QMainWindow):
                 data=json.load(f)
                 data=data['data']
             except:
-                sys.exit(app.exec_())
+                print("issue")
+                sys.exit()
 
         todayFound=False
         for stat in data:

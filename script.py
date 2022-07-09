@@ -59,6 +59,8 @@ def create_file():
             f.close()
         add_template()
 
+if(not os.getcwd().endswith('dist')):
+    os.chdir('dist')
 
 if "tracker.json" not in os.listdir():
     print("adding file")
@@ -69,7 +71,7 @@ if "tracker.json" not in os.listdir():
 while True:
     check_file()
     prev_app=get_focused_app().lower()    
-    sleep(60)
+    sleep(6)
     todayFound=False
     today=datetime.date.today()
     currTime=datetime.datetime.now()
@@ -91,7 +93,14 @@ while True:
                     minute=0
                 statDaily['foreground_apps'][curr_app]=(str(minute+1)+"min")
                 print(currTime,'->',(minute+1),curr_app.lower())
-                
+            else:
+                str_date=statDaily['date']
+                date1=datetime.datetime.strptime(str_date,f'%Y-%m-%d').date()
+                print(type(date1),type(today))
+                delta=today-date1
+                if(delta.days>10){
+                    
+                }
         #if date not found
         if(todayFound == False):
             print("today's date not found")

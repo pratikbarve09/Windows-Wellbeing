@@ -4,5 +4,6 @@
 
 Dim Shell
 Set Shell = WScript.CreateObject("WScript.Shell")
-Shell.Run """output\WindowsWellbeing.exe""", 0, False
+' Shell.CurrentDirectory = ".\dist"
+Shell.Run """dist\script.exe""", 0, False
 Set Shell = Nothing
