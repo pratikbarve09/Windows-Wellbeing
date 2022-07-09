@@ -71,7 +71,7 @@ if "tracker.json" not in os.listdir():
 while True:
     check_file()
     prev_app=get_focused_app().lower()    
-    sleep(6)
+    sleep(60)
     todayFound=False
     today=datetime.date.today()
     currTime=datetime.datetime.now()
@@ -96,11 +96,10 @@ while True:
             else:
                 str_date=statDaily['date']
                 date1=datetime.datetime.strptime(str_date,f'%Y-%m-%d').date()
-                print(type(date1),type(today))
                 delta=today-date1
-                if(delta.days>10){
-                    
-                }
+                if(delta.days>10):
+                    data.remove(statDaily)
+                
         #if date not found
         if(todayFound == False):
             print("today's date not found")
