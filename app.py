@@ -88,7 +88,7 @@ class MainWindow(QMainWindow):
 
         #####################################################
         #timer to call fn continuosly after certain interval
-        timer = QTimer(self, interval=600, timeout=self.update_today)
+        timer = QTimer(self, interval=60000, timeout=self.update_today)
         timer.start()
 
     ######updating today's graphs#########
