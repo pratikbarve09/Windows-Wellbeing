@@ -4,6 +4,5 @@
 
 Dim Shell
 Set Shell = WScript.CreateObject("WScript.Shell")
-' Shell.CurrentDirectory = ".\dist"
 Shell.Run """dist\script.exe""", 0, False
 Set Shell = Nothing
