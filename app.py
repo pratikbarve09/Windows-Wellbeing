@@ -112,6 +112,8 @@ class MainWindow(QMainWindow):
 
     def calculateTotalMinsToday(self,param):
         data=self.gather_data()
+        if(data==False):
+            return False
         foregroundAppTuple=list(data['foreground_apps'].items())
         backgroundAppTuple=list(data['background_apps'].items())
         foregroundTotalMinsToday=0
