@@ -6,7 +6,7 @@ For storing data, json file is used. Script generates json file named `tracker.j
 ### Get started:
 * #### To clone repository:
     ```
-    git clone https://github.com/pratik0903/Windows-Wellbeing.git
+    git clone https://github.com/pratikbarve09/Windows-Wellbeing.git
     ```
 
 * #### To setup project with all dependencies:
