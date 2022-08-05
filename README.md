@@ -3,12 +3,6 @@ Windows-Wellbeing is simple application which can be used to track of apps and s
 For storing data, json file is used. Script generates json file named `tracker.json` where it stores its all data.
 `tracker.json` file will get created in dist folder from from project's root directory.
 
-## How script works:
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;After running script, it checks if `tracker.json` file is present. If not, then it creates new file. If file is present, but it's empty or has some issue with file, then it rewrites that file with template present in code. 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Afterwards loop is executed in which script collects currently focused app and then adds sleep timer of 60 seconds. Afterwards, again current focused app name is collected. If previous and current name matches, then it adds that app to foreground category, else adds to background apps category. Script will also auto-delete old stats with condition days>10
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Now to get list of apps running in background (which are not in focus or lost focus within 1 minute sleep time) script uses powershell command and lists all apps running(foreground and background). Then script tries to find app (if it was having focus in 1 minute period) and because it has incremented timer for that app in foreground apps category, script tries to find similar app with same name like focused app and that app is removed from list. 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Afterwards all the apps present in that list are added and incremented in background apps category.  
-
 ### Get started:
 * #### To clone repository:
     ```
