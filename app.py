@@ -21,6 +21,9 @@ PATH_TO_JSON=""+"tracker.json"
 class MainWindow(QMainWindow):
     def __init__(self):
         super(MainWindow, self).__init__()
+        # colours for piechart slice
+        self.colors=['#00ed77','#cfb000','#0066ff','#8000ff','#e00000','#d100e0']
+
         self.ui = Ui_WindowsWellbeing()
         self.ui.setupUi(self)
         #loadUi("gui.ui",self)
@@ -40,6 +43,7 @@ class MainWindow(QMainWindow):
 
         #creating series for piechart
         self.ui.seriesTodayFr = QPieSeries()
+        self.ui.seriesTodayFr.setHoleSize(0.5)
         #chart
         self.ui.chartTodayFr = QChart()
         self.ui.chartTodayFr.addSeries(self.ui.seriesTodayFr)
@@ -47,6 +51,7 @@ class MainWindow(QMainWindow):
         self.ui.chartTodayFr.legend().hide()
         mins=self.calculateTotalMinsToday("foreground")
         self.ui.chartTodayFr.setTitle(f"Foreground running apps (total {mins} mins )")
+
         self.ui.chartTodayFr.legend().setVisible(True)
         self.ui.chartTodayFr.legend().setAlignment(Qt.AlignRight)
         self.ui.chartTodayFr.setAnimationOptions(QChart.SeriesAnimations)
@@ -66,6 +71,7 @@ class MainWindow(QMainWindow):
 
         #creating series for piechart
         self.ui.seriesTodayBk = QPieSeries()
+        self.ui.seriesTodayBk.setHoleSize(0.5)
         #chart
         self.ui.chartTodayBk = QChart()
         self.ui.chartTodayBk.addSeries(self.ui.seriesTodayBk)
@@ -94,6 +100,7 @@ class MainWindow(QMainWindow):
     ######updating today's graphs#########
     def update_today(self):
         todayData=self.gather_data()
+        print(todayData)
         if(todayData==False):
             self.foreAndBackStackedToday.setCurrentIndex(2)
             return
@@ -185,26 +192,68 @@ class MainWindow(QMainWindow):
         self.ui.seriesTodayFr.clear()
         if(data==False):
             return
-        for app,time in data['foreground_apps'].items():
+        
+        cleaned={}
+        count=0
+        for app,time in sorted(data['foreground_apps'].items(), key=lambda x: int(x[1][:-3]), reverse=True):
             intTime=int(time[:-3])
-            self.ui.seriesTodayFr.append(app,intTime)
+            if(count<5):
+                cleaned[app]=intTime
+            else:
+                cleaned['others']=cleaned.get('others',0)+intTime
+            count+=1
+        index=0
+        for appname,time in cleaned.items():
+            _slice=self.ui.seriesTodayFr.append(appname,time)
+            _slice.setBrush(QtGui.QColor(self.colors[index]))
+            index+=1
         for slice in self.ui.seriesTodayFr.slices():
             #print(slice.label(),slice.value())
             slice.setLabel("{} {}mins".format(slice.label(),int(slice.value())))
-        
-
+        self.ui.seriesTodayFr.clicked.connect(self.explode_slice_foreground)
     #########today's background series############
     def update_series_today_bk(self):
         data=self.gather_data()
         self.ui.seriesTodayBk.clear()
         if(data==False):
             return
-        for app,time in data['background_apps'].items():
+        cleaned={}
+        count=0
+        for app,time in sorted(data['background_apps'].items(), key=lambda x: int(x[1][:-3]), reverse=True):
             intTime=int(time[:-3])
-            self.ui.seriesTodayBk.append(app,intTime)
-        
+            if(count<5):
+                cleaned[app]=intTime
+            else:
+                cleaned['others']=cleaned.get('others',0)+intTime
+            count+=1
+        index=0
+        for appname,time in cleaned.items():
+            _slice=self.ui.seriesTodayBk.append(appname,time)
+            _slice.setBrush(QtGui.QColor(self.colors[index]))
+            index+=1
         for slice in self.ui.seriesTodayBk.slices():
+            #print(slice.label(),slice.value())
             slice.setLabel("{} {}mins".format(slice.label(),int(slice.value())))
+        self.ui.seriesTodayBk.clicked.connect(self.explode_slice_background)
+        
+
+    def explode_slice_foreground(self,curr_slice):
+        for slice in self.ui.seriesTodayFr.slices():
+            if(slice.isExploded()):
+                slice.setExploded(False)
+                slice.setLabelVisible(False)
+        curr_slice.setExploded(True)
+        curr_slice.setExplodeDistanceFactor(0.10)
+        curr_slice.setLabelVisible(True)
+
+    def explode_slice_background(self,curr_slice):
+        for slice in self.ui.seriesTodayBk.slices():
+            if(slice.isExploded()):
+                slice.setExploded(False)
+                slice.setLabelVisible(False)
+        curr_slice.setExploded(True)
+        curr_slice.setExplodeDistanceFactor(0.10)
+        curr_slice.setLabelVisible(True)
 
 def main():
     app = QtWidgets.QApplication(sys.argv)

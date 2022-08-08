@@ -206,7 +206,7 @@ class Ui_WindowsWellbeing(object):
         self.noDataLabelToday.setText(_translate("WindowsWellbeing", "No statistics found for today. Reboot your computer or try running script manually"))
         self.label2.setText(_translate("WindowsWellbeing", "previous graphs will go here"))
         self.thanks.setText(_translate("WindowsWellbeing", "Thanks for trying out this software "))
-        self.link.setText(_translate("WindowsWellbeing", "<html><head/><body><p>Link to github source code <a href=\"https://github.com/pratik0903/Windows-Wellbeing\"><span style=\" text-decoration: underline; color:#0000ff;\">here</span></a></p></body></html>"))
+        self.link.setText(_translate("WindowsWellbeing", "<html><head/><body><p>Link to github source code <a href=\"https://github.com/pratikbarve09/Windows-Wellbeing\"><span style=\" text-decoration: underline; color:#0000ff;\">here</span></a></p></body></html>"))
 #import qtImage_rc
 
 
