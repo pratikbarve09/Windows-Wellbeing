@@ -172,7 +172,7 @@ QPushButton:focus{
      </size>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>1</number>
     </property>
     <widget class="QWidget" name="page1">
      <property name="sizePolicy">
@@ -330,29 +330,156 @@ QPushButton:focus{
      <property name="styleSheet">
       <string notr="true"/>
      </property>
-     <widget class="QLabel" name="label2">
+     <widget class="QFrame" name="frame_3">
       <property name="geometry">
        <rect>
-        <x>310</x>
-        <y>150</y>
-        <width>131</width>
-        <height>161</height>
+        <x>10</x>
+        <y>0</y>
+        <width>791</width>
+        <height>451</height>
        </rect>
       </property>
-      <property name="font">
-       <font>
-        <pointsize>16</pointsize>
-       </font>
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
       </property>
-      <property name="text">
-       <string>previous graphs will go here</string>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
       </property>
-      <property name="alignment">
-       <set>Qt::AlignCenter</set>
+      <widget class="QStackedWidget" name="foreAndBackStackedPrev">
+       <property name="geometry">
+        <rect>
+         <x>9</x>
+         <y>9</y>
+         <width>781</width>
+         <height>451</height>
+        </rect>
+       </property>
+       <widget class="QWidget" name="foreground_prev">
+        <widget class="QWidget" name="horizontalLayoutWidget_7">
+         <property name="geometry">
+          <rect>
+           <x>-1</x>
+           <y>-1</y>
+           <width>781</width>
+           <height>441</height>
+          </rect>
+         </property>
+         <layout class="QHBoxLayout" name="prevFrQhbox"/>
+        </widget>
+       </widget>
+       <widget class="QWidget" name="background_prev">
+        <widget class="QWidget" name="horizontalLayoutWidget_8">
+         <property name="geometry">
+          <rect>
+           <x>-1</x>
+           <y>-1</y>
+           <width>781</width>
+           <height>441</height>
+          </rect>
+         </property>
+         <layout class="QHBoxLayout" name="prevBkQhbox"/>
+        </widget>
+       </widget>
+       <widget class="QWidget" name="no_prev_data">
+        <widget class="QLabel" name="no_data_prev">
+         <property name="geometry">
+          <rect>
+           <x>310</x>
+           <y>160</y>
+           <width>161</width>
+           <height>121</height>
+          </rect>
+         </property>
+         <property name="font">
+          <font>
+           <family>MS Sans Serif</family>
+           <pointsize>12</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string>No data found</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </widget>
+      </widget>
+     </widget>
+     <widget class="QFrame" name="prev_option">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>450</y>
+        <width>781</width>
+        <height>61</height>
+       </rect>
       </property>
-      <property name="wordWrap">
-       <bool>true</bool>
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
       </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <widget class="QPushButton" name="foregroundBt_prev">
+       <property name="geometry">
+        <rect>
+         <x>120</x>
+         <y>10</y>
+         <width>121</width>
+         <height>41</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton{
+	border:2px solid white;
+	background-color:white;
+	outline:none;
+}
+QPushButton:focus{
+	border:2px solid grey;
+}</string>
+       </property>
+       <property name="text">
+        <string>Foreground apps</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="backgroundBt_prev">
+       <property name="geometry">
+        <rect>
+         <x>560</x>
+         <y>10</y>
+         <width>121</width>
+         <height>41</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton{
+	border:2px solid white;
+	background-color:white;
+	outline:none;
+}
+QPushButton:focus{
+	border:2px solid grey;
+}</string>
+       </property>
+       <property name="text">
+        <string>Background apps</string>
+       </property>
+      </widget>
+      <widget class="QDateEdit" name="date_select">
+       <property name="geometry">
+        <rect>
+         <x>330</x>
+         <y>10</y>
+         <width>151</width>
+         <height>41</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color:white;</string>
+       </property>
+      </widget>
      </widget>
     </widget>
     <widget class="QWidget" name="page3">
@@ -403,7 +530,7 @@ QPushButton:focus{
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
  <resources>
-  <include location="qtImage.qrc"/>
+  <include location="Windows-Wellbeing/qtImage.qrc"/>
  </resources>
  <connections/>
 </ui>

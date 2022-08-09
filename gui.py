@@ -160,14 +160,74 @@ class Ui_WindowsWellbeing(object):
         self.page2 = QtWidgets.QWidget()
         self.page2.setStyleSheet("")
         self.page2.setObjectName("page2")
-        self.label2 = QtWidgets.QLabel(self.page2)
-        self.label2.setGeometry(QtCore.QRect(310, 150, 131, 161))
+        self.frame_3 = QtWidgets.QFrame(self.page2)
+        self.frame_3.setGeometry(QtCore.QRect(10, 0, 791, 451))
+        self.frame_3.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frame_3.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame_3.setObjectName("frame_3")
+        self.foreAndBackStackedPrev = QtWidgets.QStackedWidget(self.frame_3)
+        self.foreAndBackStackedPrev.setGeometry(QtCore.QRect(9, 9, 781, 451))
+        self.foreAndBackStackedPrev.setObjectName("foreAndBackStackedPrev")
+        self.foreground_prev = QtWidgets.QWidget()
+        self.foreground_prev.setObjectName("foreground_prev")
+        self.horizontalLayoutWidget_7 = QtWidgets.QWidget(self.foreground_prev)
+        self.horizontalLayoutWidget_7.setGeometry(QtCore.QRect(-1, -1, 781, 441))
+        self.horizontalLayoutWidget_7.setObjectName("horizontalLayoutWidget_7")
+        self.prevFrQhbox = QtWidgets.QHBoxLayout(self.horizontalLayoutWidget_7)
+        self.prevFrQhbox.setContentsMargins(0, 0, 0, 0)
+        self.prevFrQhbox.setObjectName("prevFrQhbox")
+        self.foreAndBackStackedPrev.addWidget(self.foreground_prev)
+        self.background_prev = QtWidgets.QWidget()
+        self.background_prev.setObjectName("background_prev")
+        self.horizontalLayoutWidget_8 = QtWidgets.QWidget(self.background_prev)
+        self.horizontalLayoutWidget_8.setGeometry(QtCore.QRect(-1, -1, 781, 441))
+        self.horizontalLayoutWidget_8.setObjectName("horizontalLayoutWidget_8")
+        self.prevBkQhbox = QtWidgets.QHBoxLayout(self.horizontalLayoutWidget_8)
+        self.prevBkQhbox.setContentsMargins(0, 0, 0, 0)
+        self.prevBkQhbox.setObjectName("prevBkQhbox")
+        self.foreAndBackStackedPrev.addWidget(self.background_prev)
+        self.no_prev_data = QtWidgets.QWidget()
+        self.no_prev_data.setObjectName("no_prev_data")
+        self.no_data_prev = QtWidgets.QLabel(self.no_prev_data)
+        self.no_data_prev.setGeometry(QtCore.QRect(310, 160, 161, 121))
         font = QtGui.QFont()
-        font.setPointSize(16)
-        self.label2.setFont(font)
-        self.label2.setAlignment(QtCore.Qt.AlignCenter)
-        self.label2.setWordWrap(True)
-        self.label2.setObjectName("label2")
+        font.setFamily("MS Sans Serif")
+        font.setPointSize(12)
+        self.no_data_prev.setFont(font)
+        self.no_data_prev.setAlignment(QtCore.Qt.AlignCenter)
+        self.no_data_prev.setObjectName("no_data_prev")
+        self.foreAndBackStackedPrev.addWidget(self.no_prev_data)
+        self.prev_option = QtWidgets.QFrame(self.page2)
+        self.prev_option.setGeometry(QtCore.QRect(20, 450, 781, 61))
+        self.prev_option.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.prev_option.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.prev_option.setObjectName("prev_option")
+        self.foregroundBt_prev = QtWidgets.QPushButton(self.prev_option)
+        self.foregroundBt_prev.setGeometry(QtCore.QRect(120, 10, 121, 41))
+        self.foregroundBt_prev.setStyleSheet("QPushButton{\n"
+"    border:2px solid white;\n"
+"    background-color:white;\n"
+"    outline:none;\n"
+"}\n"
+"QPushButton:focus{\n"
+"    border:2px solid grey;\n"
+"}")
+        self.foregroundBt_prev.setObjectName("foregroundBt_prev")
+        self.backgroundBt_prev = QtWidgets.QPushButton(self.prev_option)
+        self.backgroundBt_prev.setGeometry(QtCore.QRect(560, 10, 121, 41))
+        self.backgroundBt_prev.setStyleSheet("QPushButton{\n"
+"    border:2px solid white;\n"
+"    background-color:white;\n"
+"    outline:none;\n"
+"}\n"
+"QPushButton:focus{\n"
+"    border:2px solid grey;\n"
+"}")
+        self.backgroundBt_prev.setObjectName("backgroundBt_prev")
+        self.date_select = QtWidgets.QDateEdit(self.prev_option)
+        self.date_select.setGeometry(QtCore.QRect(330, 10, 151, 41))
+        self.date_select.setStyleSheet("background-color:white;")
+        self.date_select.setObjectName("date_select")
         self.stackedWidget.addWidget(self.page2)
         self.page3 = QtWidgets.QWidget()
         self.page3.setObjectName("page3")
@@ -191,7 +251,7 @@ class Ui_WindowsWellbeing(object):
         WindowsWellbeing.setStatusBar(self.statusbar)
 
         self.retranslateUi(WindowsWellbeing)
-        self.stackedWidget.setCurrentIndex(0)
+        self.stackedWidget.setCurrentIndex(1)
         self.foreAndBackStackedToday.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(WindowsWellbeing)
 
@@ -204,10 +264,12 @@ class Ui_WindowsWellbeing(object):
         self.foregroundBt.setText(_translate("WindowsWellbeing", "Foreground apps"))
         self.backgroundBt.setText(_translate("WindowsWellbeing", "Background apps"))
         self.noDataLabelToday.setText(_translate("WindowsWellbeing", "No statistics found for today. Reboot your computer or try running script manually"))
-        self.label2.setText(_translate("WindowsWellbeing", "previous graphs will go here"))
+        self.no_data_prev.setText(_translate("WindowsWellbeing", "No data found"))
+        self.foregroundBt_prev.setText(_translate("WindowsWellbeing", "Foreground apps"))
+        self.backgroundBt_prev.setText(_translate("WindowsWellbeing", "Background apps"))
         self.thanks.setText(_translate("WindowsWellbeing", "Thanks for trying out this software "))
-        self.link.setText(_translate("WindowsWellbeing", "<html><head/><body><p>Link to github source code <a href=\"https://github.com/pratikbarve09/Windows-Wellbeing\"><span style=\" text-decoration: underline; color:#0000ff;\">here</span></a></p></body></html>"))
-#import qtImage_rc
+        self.link.setText(_translate("WindowsWellbeing", "<html><head/><body><p>Link to github source code <a href=\"https://github.com/pratik0903/Windows-Wellbeing\"><span style=\" text-decoration: underline; color:#0000ff;\">here</span></a></p></body></html>"))
+
 
 
 if __name__ == "__main__":

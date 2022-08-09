@@ -31,7 +31,7 @@ class MainWindow(QMainWindow):
         self.ui.link.setOpenExternalLinks(True)
         #button click to switch page
         self.btEvents()
-        isTodayDataFound=self.gather_data()
+        isTodayDataFound=self.gather_data_today()
         if(isTodayDataFound==False):
             self.ui.foreAndBackStackedToday.setCurrentIndex(2)
         else:
@@ -86,9 +86,61 @@ class MainWindow(QMainWindow):
         self.ui.chartviewTodayBk = QChartView(self.ui.chartTodayBk)
         self.ui.chartviewTodayBk.setRenderHint(QPainter.Antialiasing)
         self.ui.backgroundQhbox.addWidget(self.ui.chartviewTodayBk)
-        #self.chartTodayBk.setTheme(QChart.ChartThemeBlueCerulean)
         self.update_series_today_bk()
-     
+
+        ########### create previous data chart#####################
+        ###########################################################
+        		#creating series for piechart
+        self.ui.seriesPrevFr = QPieSeries()
+        self.ui.seriesPrevFr.setHoleSize(0.5)
+        #chart
+        self.ui.chartPrevFr = QChart()
+        self.ui.chartPrevFr.addSeries(self.ui.seriesPrevFr)
+        self.ui.chartPrevFr.createDefaultAxes()
+        self.ui.chartPrevFr.legend().hide()
+        
+
+        self.ui.chartPrevFr.legend().setVisible(True)
+        self.ui.chartPrevFr.legend().setAlignment(Qt.AlignBottom)
+        self.ui.chartPrevFr.setAnimationOptions(QChart.SeriesAnimations)
+        
+        #chartview
+        self.ui.chartViewPrevFr = QChartView(self.ui.chartPrevFr)
+        self.ui.chartViewPrevFr.setRenderHint(QPainter.Antialiasing)
+        self.ui.prevFrQhbox.addWidget(self.ui.chartViewPrevFr)
+        
+        ####################################################
+        ###############previous's background chart#############
+
+        #creating series for piechart
+        self.ui.seriesPrevBk = QPieSeries()
+        self.ui.seriesPrevBk.setHoleSize(0.5)
+        #chart
+        self.ui.chartPrevBk = QChart()
+        self.ui.chartPrevBk.addSeries(self.ui.seriesPrevBk)
+        self.ui.chartPrevBk.createDefaultAxes()
+        self.ui.chartPrevBk.legend().hide()
+        self.ui.chartPrevBk.legend().setVisible(True)
+        self.ui.chartPrevBk.legend().setAlignment(Qt.AlignBottom)
+        self.ui.chartPrevBk.setAnimationOptions(QChart.SeriesAnimations)
+        #chartview
+        self.ui.chartViewPrevBk = QChartView(self.ui.chartPrevBk)
+        self.ui.chartViewPrevBk.setRenderHint(QPainter.Antialiasing)
+        self.ui.prevBkQhbox.addWidget(self.ui.chartViewPrevBk)
+        
+        #############prev date signal#############
+        self.ui.date_select.dateChanged.connect(self.get_prev_data)
+        #############set current index of prev page to point no data########
+        self.set_prev_page_no_data()
+        yestarday=datetime.date.today()-datetime.timedelta(days=1)
+        min_date=(yestarday-datetime.timedelta(days=10)).strftime("%Y-%m-%d")
+        max_date=yestarday.strftime("%Y-%m-%d")
+        qt_min_date=QtCore.QDate.fromString(min_date, 'yyyy-MM-dd')
+        qt_max_date=QtCore.QDate.fromString(max_date, 'yyyy-MM-dd')
+        self.ui.date_select.setMaximumDate(qt_max_date)
+        self.ui.date_select.setMinimumDate(qt_min_date)
+        self.ui.date_select.setDate(qt_max_date)
+        
         #########show window########
         self.show()
 
@@ -97,12 +149,88 @@ class MainWindow(QMainWindow):
         timer = QTimer(self, interval=60000, timeout=self.update_today)
         timer.start()
 
+
+    def get_previous_foreground_apps(self):
+        if(self.ui.foreAndBackStackedPrev.currentIndex()!=0):
+            self.ui.foreAndBackStackedPrev.setCurrentIndex(0)
+
+    def get_previous_background_apps(self):
+        if(self.ui.foreAndBackStackedPrev.currentIndex()!=1):
+            self.ui.foreAndBackStackedPrev.setCurrentIndex(1)
+    
+    def set_prev_page_no_data(self):
+        self.ui.foreAndBackStackedPrev.setCurrentIndex(2)
+
+    def get_prev_data(self):
+        date_input=self.ui.date_select.date().toPyDate().strftime(f"%Y-%m-%d")
+        data=self.gather_previous_data(date_input)
+        if(data==False):
+            self.set_prev_page_no_data()
+        else:
+            self.update_series_prev_fr(data)
+            self.update_series_prev_bk(data)
+            if(self.ui.foreAndBackStackedPrev.currentIndex()==2):
+                self.ui.foreAndBackStackedPrev.setCurrentIndex(0)
+
+
+    def update_series_prev_fr(self,data):
+        total_time=0        
+        self.ui.seriesPrevFr.clear()
+        if(data==False):
+            return
+        
+        cleaned={}
+        count=0
+        for app,time in sorted(data['foreground_apps'].items(), key=lambda x: int(x[1][:-3]), reverse=True):
+            intTime=int(time[:-3])
+            total_time+=intTime
+            if(count<5):
+                cleaned[app]=intTime
+            else:
+                cleaned['others']=cleaned.get('others',0)+intTime
+            count+=1
+        index=0
+        for appname,time in cleaned.items():
+            _slice=self.ui.seriesPrevFr.append(appname,time)
+            _slice.setBrush(QtGui.QColor(self.colors[index]))
+            index+=1
+        for slice in self.ui.seriesPrevFr.slices():
+            #print(slice.label(),slice.value())
+            slice.setLabel("{} {}mins".format(slice.label(),int(slice.value())))
+        self.ui.seriesPrevFr.clicked.connect(self.explode_slice_foreground_prev)
+        self.ui.chartPrevFr.setTitle(f"Foreground running apps (total {total_time} mins )")
+        
+    def update_series_prev_bk(self,data):    
+        self.ui.seriesPrevBk.clear()
+        if(data==False):
+            return
+        cleaned={}
+        count=0
+        total_time=0
+        for app,time in sorted(data['background_apps'].items(), key=lambda x: int(x[1][:-3]), reverse=True):
+            intTime=int(time[:-3])
+            total_time+=intTime
+            if(count<5):
+                cleaned[app]=intTime
+            else:
+                cleaned['others']=cleaned.get('others',0)+intTime
+            count+=1
+        index=0
+        for appname,time in cleaned.items():
+            _slice=self.ui.seriesPrevBk.append(appname,time)
+            _slice.setBrush(QtGui.QColor(self.colors[index]))
+            index+=1
+        for slice in self.ui.seriesPrevBk.slices():
+            #print(slice.label(),slice.value())
+            slice.setLabel("{} {}mins".format(slice.label(),int(slice.value())))
+        self.ui.seriesPrevBk.clicked.connect(self.explode_slice_background_prev)
+        self.ui.chartPrevBk.setTitle(f"Running apps (minimized/background) (total {total_time} mins )")
+
     ######updating today's graphs#########
     def update_today(self):
-        todayData=self.gather_data()
-        print(todayData)
+        todayData=self.gather_data_today()
         if(todayData==False):
-            self.foreAndBackStackedToday.setCurrentIndex(2)
+            self.ui.foreAndBackStackedToday.setCurrentIndex(2)
             return
         self.update_series_today_fr()
         self.update_series_today_bk()
@@ -116,9 +244,12 @@ class MainWindow(QMainWindow):
         #today's foreground and background bt
         self.ui.foregroundBt.clicked.connect(self.today_foreground_bt)
         self.ui.backgroundBt.clicked.connect(self.today_background_bt)
+        #previous foreground and background bt
+        self.ui.foregroundBt_prev.clicked.connect(self.previous_foreground_bt)
+        self.ui.backgroundBt_prev.clicked.connect(self.previous_background_bt)
 
     def calculateTotalMinsToday(self,param):
-        data=self.gather_data()
+        data=self.gather_data_today()
         if(data==False):
             return False
         foregroundAppTuple=list(data['foreground_apps'].items())
@@ -135,17 +266,35 @@ class MainWindow(QMainWindow):
             return foregroundTotalMinsToday
         return backgroundTotalMinsToday    
         
+    def previous_foreground_bt(self):
+        date_input=self.ui.date_select.date().toPyDate().strftime(f"%Y-%m-%d")
+        data=self.gather_previous_data(date_input)
+        if(data==False):
+            self.set_prev_page_no_data()
+        else:
+            self.update_series_prev_fr(data)
+            self.ui.foreAndBackStackedPrev.setCurrentIndex(0)
+        
+
+    def previous_background_bt(self):
+        date_input=self.ui.date_select.date().toPyDate().strftime(f"%Y-%m-%d")
+        data=self.gather_previous_data(date_input)
+        if(data==False):
+            self.set_prev_page_no_data()
+        else:
+            self.update_series_prev_bk(data)
+            self.ui.foreAndBackStackedPrev.setCurrentIndex(1)
 
     def today_foreground_bt(self):
         #switching between foreground and background for today
-        if(self.gather_data()==False):
+        if(self.gather_data_today()==False):
             self.ui.foreAndBackStackedToday.setCurrentIndex(2)
         else:
             self.ui.foreAndBackStackedToday.setCurrentIndex(0)
 
     def today_background_bt(self):
         #switching between foreground and background for today
-        if(self.gather_data()==False):
+        if(self.gather_data_today()==False):
             self.ui.foreAndBackStackedToday.setCurrentIndex(2)
         else:
             self.ui.foreAndBackStackedToday.setCurrentIndex(1)
@@ -162,7 +311,7 @@ class MainWindow(QMainWindow):
     ######################################################################
 
     #########gather data from json#############
-    def gather_data(self):
+    def gather_data_today(self):
         today=datetime.date.today()
         #print(today)
         with open(PATH_TO_JSON) as f:
@@ -186,9 +335,34 @@ class MainWindow(QMainWindow):
             #print(todayStat)
             return todayStat
 
+    
+    ###########get previous data
+    def gather_previous_data(self,date):
+        with open(PATH_TO_JSON) as f:
+            try:
+                data=json.load(f)
+                data=data['data']
+            except:
+                print("issue")
+                sys.exit()
+
+        date_found=False
+        for stat in data:
+            if(stat['date']==date):
+                date_found=True
+                prevStat=stat
+                break
+        if(date_found==False):
+            #print that no data for today
+            return date_found
+        else:
+            #create chart in page index 0
+            #print(prevStat)
+            return prevStat
+
     #########today's foreground series############
     def update_series_today_fr(self):
-        data=self.gather_data()
+        data=self.gather_data_today()
         self.ui.seriesTodayFr.clear()
         if(data==False):
             return
@@ -213,7 +387,7 @@ class MainWindow(QMainWindow):
         self.ui.seriesTodayFr.clicked.connect(self.explode_slice_foreground)
     #########today's background series############
     def update_series_today_bk(self):
-        data=self.gather_data()
+        data=self.gather_data_today()
         self.ui.seriesTodayBk.clear()
         if(data==False):
             return
@@ -254,6 +428,25 @@ class MainWindow(QMainWindow):
         curr_slice.setExploded(True)
         curr_slice.setExplodeDistanceFactor(0.10)
         curr_slice.setLabelVisible(True)
+
+    def explode_slice_foreground_prev(self,curr_slice):
+        for slice in self.ui.seriesPrevFr.slices():
+            if(slice.isExploded()):
+                slice.setExploded(False)
+                slice.setLabelVisible(False)
+        curr_slice.setExploded(True)
+        curr_slice.setExplodeDistanceFactor(0.10)
+        curr_slice.setLabelVisible(True)
+
+    def explode_slice_background_prev(self,curr_slice):
+        for slice in self.ui.seriesPrevBk.slices():
+            if(slice.isExploded()):
+                slice.setExploded(False)
+                slice.setLabelVisible(False)
+        curr_slice.setExploded(True)
+        curr_slice.setExplodeDistanceFactor(0.10)
+        curr_slice.setLabelVisible(True)
+
 
 def main():
     app = QtWidgets.QApplication(sys.argv)
